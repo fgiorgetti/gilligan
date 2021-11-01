@@ -217,7 +217,7 @@ class RESTService {
                 response.status === 404
                   ? new Error(`${method}::${type} not implemented`)
                   : new Error(
-                      `${method} ${type} ${response.statusText} (${response.status})`
+                      `${method} ${type} ${response.text()} ${response.statusText} (${response.status})`
                     );
               console.log("rejecting with error");
               console.log(e);
