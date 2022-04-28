@@ -5,7 +5,7 @@ on:
     # Right now, we run this job automatically when a semantically versioned
     # tag is pushed (with an optional suffix).
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+*'
+      - 'v[0-9]+.[0-9]+.[0-9]+*'
 jobs:
   build-and-release:
     name: Build and release gilligan
@@ -28,7 +28,7 @@ jobs:
           yarn test
       - name: Package 📦
         run: |
-          cd build/ && tar -zcvf ../console-${RELEASE_VERSION}.tgz --exclude='./data' .
+          cd build/ && tar -zcvf ../console.tgz --exclude='./data' .
       - name: Create Draft Release ✅
         id:  create_release
         uses: actions/create-release@v1
@@ -39,7 +39,7 @@ jobs:
            release_name: Release ${{ env.RELEASE_VERSION }}
            body: |
              Gilligan is available as a tar ball:
-              - console-${{ env.RELEASE_VERSION }}.tgz
+              - console.tgz
 
              Issues fixed in this release
              - https://github.com/skupperproject/gilligan/issues?q=is:issue%20milestone:${{ env.RELEASE_VERSION }}
@@ -51,6 +51,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./console-${{ env.RELEASE_VERSION }}.tgz
-          asset_name: console-${{ env.RELEASE_VERSION }}.tgz
+          asset_path: ./console.tgz
+          asset_name: console.tgz
           asset_content_type: application/tar+gzip
