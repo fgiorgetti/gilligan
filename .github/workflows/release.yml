@@ -29,7 +29,7 @@ jobs:
       - name: Package 📦
         run: |
           cd build/ && tar -zcvf ../console-${RELEASE_VERSION}.tgz --exclude='./data' .
-      - name: Create Draft Release
+      - name: Create Draft Release ✅
         id:  create_release
         uses: actions/create-release@v1
         env:
@@ -37,7 +37,6 @@ jobs:
         with:
            tag_name: ${{ github.ref }}
            release_name: Release ${{ env.RELEASE_VERSION }}
-           artifacts: console-${{ env.RELEASE_VERSION }}.tgz
            body: |
              Gilligan is available as a tar ball:
               - console-${{ env.RELEASE_VERSION }}.tgz
@@ -45,3 +44,13 @@ jobs:
              Issues fixed in this release
              - https://github.com/skupperproject/gilligan/issues?q=is:issue%20milestone:${{ env.RELEASE_VERSION }}
            draft: true
+      - name: Upload Release Asset ⬆️
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./console-${{ env.RELEASE_VERSION }}.tgz
+          asset_name: console-${{ env.RELEASE_VERSION }}.tgz
+          asset_content_type: application/tar+gzip
