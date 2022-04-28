@@ -35,6 +35,7 @@ jobs:
         with:
            tag_name: ${{ github.ref }}
            release_name: Release ${{ github.ref }}
+           artifacts: console-${{ github.ref }}.tgz
            body: |
              Gilligan is available as a tar ball:
               - console-${{ github.ref }}.tgz
